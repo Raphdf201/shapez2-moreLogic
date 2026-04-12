@@ -1,13 +1,12 @@
 {
-  "Version": "0.0.1",
+  "Version": "1.0.0",
   "Title": "MoreLogic",
   "Description": "Adds more logic items such as a nand gate and arithmetic buildings",
   "Author": "Raphdf201",
-  "SavedModVersionCompabilityRangeWithSelf": "0.*.*",
-  "GameVersionSupportRange": "*",
+  "SavedModVersionCompabilityRangeWithSelf": "1.*.*",
+  "GameVersionSupportRange": "^1.0.0",
   "AffectsSaveGames": true,
   "DisablesAchievements": false,
-  "Conflicts": [],
   "Assemblies": [
     "MoreLogic.dll"
   ],
@@ -20,7 +19,8 @@
     {
       "ModId": "steam:3542611357",
       "ModTitle": "Shapez Shifter",
-      "Version": "^0.9.1"
+      "Version": "^1.0.0"
     }
-  ]
+  ],
+  "Conflicts": []
 }

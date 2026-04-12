@@ -1,0 +1,147 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Core.Factory;
+using Core.Localization;
+using Core.Logging;
+using Game.Content.Features.Signals;
+using Game.Core.Map.Simulation;
+using ShapezShifter.Flow;
+using ShapezShifter.Flow.Atomic;
+using ShapezShifter.Flow.Research;
+using ShapezShifter.Flow.Toolbar;
+using ShapezShifter.Hijack;
+using ShapezShifter.Kit;
+using ShapezShifter.Textures;
+using UnityEngine;
+
+namespace MoreLogic;
+
+public class NAndBuilding
+{
+    private readonly BuildingDefinitionId _defId = new("nand");
+    private readonly Core.Logging.ILogger _logger;
+
+    public NAndBuilding(Core.Logging.ILogger logger)
+    {
+        _logger = logger;
+
+        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new("nandgroup"))
+            .WithTitle("building-variant.nand-gate.title".T())
+            .WithDescription("building-variant.nand-gate.description".T())
+            .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("nand.png"), out _))
+            .AsNonTransportableBuilding()
+            .WithPreferredPlacement(DefaultPreferredPlacementMode.Single)
+            .AutoConnected();
+
+        IBuildingConnectorData connectorData = BuildingConnectors.SingleTile()
+            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.South))
+            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.North))
+            .AddWireOutput(WireConnectorConfig.CustomOutput(TileDirection.East))
+            .Build();
+
+        IBuildingBuilder blding = Building.Create(_defId)
+            .WithConnectorData(connectorData)
+            .DynamicallyRendering<NAndGateSimulationRenderer, NAndGateSimulation, INAndGateDrawData>(new NAndGateDrawData())
+            .WithStaticDrawData(NAndGateDrawData.CreateDrawData())
+            .WithoutSound()
+            .WithoutSimulationConfiguration()
+            .WithEfficiencyData(new BuildingEfficiencyData(2, 1));
+
+        AtomicBuildings.Extend()
+            .AllScenarios()
+            .WithBuilding(blding, bldingGroup)
+            .UnlockedAtMilestone(new ByIndexMilestoneSelector(2))
+            .WithDefaultPlacement()
+            .InToolbar(ToolbarElementLocator.Root().ChildAt(2).ChildAt(6).ChildAt(^1).InsertAfter())
+            .WithSimulation(new NAndGateFactoryBuilder(), _logger)
+            .WithCustomModules(new NAndGateModuleDataProvider())
+            .WithoutPrediction()
+            .Build();
+    }
+
+    public AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState> Register()
+    {
+        return new AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState>(
+            new NAndGateSimulationFactory(), _defId, _logger);
+    }
+}
+
+public class NAndGateDrawData : INAndGateDrawData
+{
+    public static BuildingDrawData CreateDrawData()
+    {
+        var baseMeshPath = Main.Res.SubPath("nand.fbx");
+        Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
+        LOD6Mesh lodMesh = MeshLod.Create().AddLod0Mesh(baseMesh)
+            .UseLod0AsLod1()
+            .UseLod1AsLod2()
+            .UseLod2AsLod3()
+            .UseLod3AsLod4()
+            .UseLod4AsLod5()
+            .BuildLod6Mesh();
+
+        return new BuildingDrawData(
+            false,
+            [lodMesh, lodMesh, lodMesh],
+            lodMesh,
+            lodMesh,
+            lodMesh.LODClose,
+            new LODEmptyMesh(),
+            BoundingBoxHelper.CreateBasicCollider(baseMesh),
+            new NAndGateDrawData(),
+            false,
+            null,
+            false);
+    }
+}
+
+public class NAndGateFactoryBuilder
+    : IBuildingSimulationFactoryBuilder<NAndGateSimulation, LogicGate2In1OutSimulationState, EmptyCustomSimulationConfiguration>
+{
+    public IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation> BuildFactory(
+        SimulationSystemsDependencies dependencies,
+        [UnscopedRef] out EmptyCustomSimulationConfiguration config)
+    {
+        config = new EmptyCustomSimulationConfiguration();
+        return new NAndGateSimulationFactory();
+    }
+}
+
+public class NAndGateModuleDataProvider :
+    SimulationBasedBuildingModuleDataProvider<NAndGateSimulation>
+{
+    protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
+        BuildingModel building,
+        ILocalizedSimulation localizedSimulation,
+        NAndGateSimulation actualSimulation)
+    {
+        yield return new HUDSidePanelModuleWireInfo.Data(
+            "Input 1", actualSimulation.Input0Conductor);
+        yield return new HUDSidePanelModuleWireInfo.Data(
+            "Input 2", actualSimulation.Input1Conductor);
+        yield return new HUDSidePanelModuleWireInfo.Data(
+            "Output", actualSimulation.OutputConductor);
+    }
+}
+
+public class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGate2In1OutSimulation(state)
+{
+    protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
+    {
+        return IntegerSignal.Get(!(a.IsTruthy() && b.IsTruthy()));
+    }
+}
+
+public class NAndGateSimulationFactory :
+    IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation>
+{
+    public NAndGateSimulation Produce(LogicGate2In1OutSimulationState state)
+    {
+        return new NAndGateSimulation(state);
+    }
+}
+
+public class NAndGateSimulationRenderer(IMapModel map)
+    : StatelessBuildingSimulationRenderer<NAndGateSimulation, INAndGateDrawData>(map);
+
+public interface INAndGateDrawData : IBuildingCustomDrawData;
