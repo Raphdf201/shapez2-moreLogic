@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NandMod", "NandMod.csproj", "{A976D967-7F30-48CB-8498-7712094C1C13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreLogic", "MoreLogic.csproj", "{A976D967-7F30-48CB-8498-7712094C1C13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

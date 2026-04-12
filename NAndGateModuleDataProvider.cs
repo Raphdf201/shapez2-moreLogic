@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Game.Core.Map.Simulation;
 
-namespace NandMod;
+namespace MoreLogic;
 
 public class NAndGateModuleDataProvider : 
     SimulationBasedBuildingModuleDataProvider<NAndGateSimulation>

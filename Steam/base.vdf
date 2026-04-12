@@ -5,6 +5,6 @@
     "contentfolder" "${CONTENT_PATH}"
     "previewfile" "${PREVIEW_IMG}"
     "visibility" "0"
-    "title" "Simple nand"
-    "description" "Simple mod that adds a NAND gate"
+    "title" "More logic"
+    "description" "Adds more logic items such as a nand gate and arithmetic buildings"
 }

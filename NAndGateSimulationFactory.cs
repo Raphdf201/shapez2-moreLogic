@@ -1,6 +1,6 @@
 ﻿using Core.Factory;
 
-namespace NandMod;
+namespace MoreLogic;
 
 public class NAndGateSimulationFactory :
     IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation>

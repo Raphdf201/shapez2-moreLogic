@@ -1,3 +1,3 @@
-namespace NandMod;
+namespace MoreLogic;
 
 public interface INAndGateDrawData : IBuildingCustomDrawData;

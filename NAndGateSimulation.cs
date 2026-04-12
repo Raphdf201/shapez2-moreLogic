@@ -1,6 +1,6 @@
 ﻿using Game.Content.Features.Signals;
 
-namespace NandMod;
+namespace MoreLogic;
 
 public class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGate2In1OutSimulation(state)
 {

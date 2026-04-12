@@ -11,7 +11,7 @@ using ShapezShifter.Kit;
 using ShapezShifter.SharpDetour;
 using ShapezShifter.Textures;
 
-namespace NandMod;
+namespace MoreLogic;
 
 public class Main : IMod
 {

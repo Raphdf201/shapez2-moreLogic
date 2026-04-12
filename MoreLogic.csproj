@@ -5,11 +5,11 @@
         <Nullable>disable</Nullable>
         <RunPostBuildEvent>Always</RunPostBuildEvent>
         <LangVersion>12</LangVersion>
-        <RootNamespace>NandMod</RootNamespace>
+        <RootNamespace>MoreLogic</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>
-        <OutputPath>$(SPZ2_PERSISTENT)\mods\NandMod</OutputPath>
+        <OutputPath>$(SPZ2_PERSISTENT)\mods\MoreLogic</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
     <PropertyGroup>

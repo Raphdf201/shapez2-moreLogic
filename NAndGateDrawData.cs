@@ -1,7 +1,7 @@
 using ShapezShifter.Kit;
 using UnityEngine;
 
-namespace NandMod;
+namespace MoreLogic;
 
 public class NAndGateDrawData : INAndGateDrawData
 {
