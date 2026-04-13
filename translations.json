@@ -1,10 +1,14 @@
 {
   "en-US": {
-    "building-variant.nand-gate.title": "NAND",
-    "building-variant.nand-gate.description": "This is a NAND gate. It is not an AND gate"
+    "building-variant.nand-gate.title": "NAND Gate",
+    "building-variant.nand-gate.description": "Deactivates if both inputs are on",
+    "building-variant.adder.title": "Adder",
+    "building-variant.adder.description": "Adds two integer signals"
   },
   "fr-CA": {
-    "building-variant.nand-gate.title": "NAND",
-    "building-variant.nand-gate.description": "Ceci est une gate NAND. Ce n'est pas une gate AND"
+    "building-variant.nand-gate.title": "Porte NAND",
+    "building-variant.nand-gate.description": "Se désactive si les deux signaux d'entrée sont vrais",
+    "building-variant.adder.title": "Adder",
+    "building-variant.adder.description": "Additionne deux signaux de nombre"
   }
 }

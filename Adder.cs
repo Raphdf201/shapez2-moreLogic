@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Core.Factory;
 using Core.Localization;
@@ -16,19 +17,19 @@ using ILogger = Core.Logging.ILogger;
 
 namespace MoreLogic;
 
-public class NAndBuilding
+public class AdderBuilding
 {
-    private readonly BuildingDefinitionId _defId = new("nand");
+    private readonly BuildingDefinitionId _defId = new("adder");
     private readonly ILogger _logger;
 
-    public NAndBuilding(ILogger logger)
+    public AdderBuilding(ILogger logger)
     {
         _logger = logger;
 
-        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("nandgroup"))
-            .WithTitle("building-variant.nand-gate.title".T())
-            .WithDescription("building-variant.nand-gate.description".T())
-            .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("nand.png"), out _))
+        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("addergroup"))
+            .WithTitle("building-variant.adder.title".T())
+            .WithDescription("building-variant.adder.description".T())
+            .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("adder.png"), out _))
             .AsNonTransportableBuilding()
             .WithPreferredPlacement(DefaultPreferredPlacementMode.Single)
             .AutoConnected();
@@ -41,9 +42,9 @@ public class NAndBuilding
 
         IBuildingBuilder blding = Building.Create(_defId)
             .WithConnectorData(connectorData)
-            .DynamicallyRendering<NAndGateSimulationRenderer, NAndGateSimulation, INAndGateDrawData>(
-                new NAndGateDrawData())
-            .WithStaticDrawData(NAndGateDrawData.CreateDrawData())
+            .DynamicallyRendering<AdderSimulationRenderer, AdderSimulation, IAdderDrawData>(
+                new AdderDrawData())
+            .WithStaticDrawData(AdderDrawData.CreateDrawData())
             .WithoutSound()
             .WithoutSimulationConfiguration()
             .WithEfficiencyData(new BuildingEfficiencyData(2, 1));
@@ -54,24 +55,24 @@ public class NAndBuilding
             .UnlockedAtMilestone(new ByIndexMilestoneSelector(2))
             .WithDefaultPlacement()
             .InToolbar(ToolbarElementLocator.Root().ChildAt(2).ChildAt(6).ChildAt(^1).InsertAfter())
-            .WithSimulation(new NAndGateFactoryBuilder(), _logger)
-            .WithCustomModules(new NAndGateModuleDataProvider())
+            .WithSimulation(new AdderFactoryBuilder(), _logger)
+            .WithCustomModules(new AdderModuleDataProvider())
             .WithoutPrediction()
             .Build();
     }
 
-    public AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState> Register()
+    public AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState> Register()
     {
-        return new AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState>(
-            new NAndGateSimulationFactory(), _defId, _logger);
+        return new AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState>(
+            new AdderSimulationFactory(), _defId, _logger);
     }
 }
 
-public class NAndGateDrawData : INAndGateDrawData
+public class AdderDrawData : IAdderDrawData
 {
     public static BuildingDrawData CreateDrawData()
     {
-        var baseMeshPath = Main.Res.SubPath("nand.fbx");
+        var baseMeshPath = Main.Res.SubPath("adder.fbx");
         Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
         LOD6Mesh lodMesh = MeshLod.Create().AddLod0Mesh(baseMesh)
             .UseLod0AsLod1()
@@ -89,33 +90,33 @@ public class NAndGateDrawData : INAndGateDrawData
             lodMesh.LODClose,
             new LODEmptyMesh(),
             BoundingBoxHelper.CreateBasicCollider(baseMesh),
-            new NAndGateDrawData(),
+            new AdderDrawData(),
             false,
             null,
             false);
     }
 }
 
-public class NAndGateFactoryBuilder
-    : IBuildingSimulationFactoryBuilder<NAndGateSimulation, LogicGate2In1OutSimulationState,
+public class AdderFactoryBuilder
+    : IBuildingSimulationFactoryBuilder<AdderSimulation, LogicGate2In1OutSimulationState,
         EmptyCustomSimulationConfiguration>
 {
-    public IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation> BuildFactory(
+    public IFactory<LogicGate2In1OutSimulationState, AdderSimulation> BuildFactory(
         SimulationSystemsDependencies dependencies,
         [UnscopedRef] out EmptyCustomSimulationConfiguration config)
     {
         config = new EmptyCustomSimulationConfiguration();
-        return new NAndGateSimulationFactory();
+        return new AdderSimulationFactory();
     }
 }
 
-public class NAndGateModuleDataProvider :
-    SimulationBasedBuildingModuleDataProvider<NAndGateSimulation>
+public class AdderModuleDataProvider :
+    SimulationBasedBuildingModuleDataProvider<AdderSimulation>
 {
     protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
         BuildingModel building,
         ILocalizedSimulation localizedSimulation,
-        NAndGateSimulation actualSimulation)
+        AdderSimulation actualSimulation)
     {
         yield return new HUDSidePanelModuleWireInfo.Data(
             "Input 1", actualSimulation.Input0Conductor);
@@ -126,24 +127,30 @@ public class NAndGateModuleDataProvider :
     }
 }
 
-public class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGate2In1OutSimulation(state)
+public class AdderSimulation(LogicGate2In1OutSimulationState state)
+    : LogicGate2In1OutSimulation(state)
 {
     protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
     {
-        return IntegerSignal.Get(!(a.IsTruthy() && b.IsTruthy()));
+        if (a is IntegerSignal sig1 && b is IntegerSignal sig2)
+        {
+            return IntegerSignal.Get(sig1.Value + sig2.Value);
+        }
+
+        return NullSignal.Instance;
     }
 }
 
-public class NAndGateSimulationFactory :
-    IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation>
+public class AdderSimulationFactory :
+    IFactory<LogicGate2In1OutSimulationState, AdderSimulation>
 {
-    public NAndGateSimulation Produce(LogicGate2In1OutSimulationState state)
+    public AdderSimulation Produce(LogicGate2In1OutSimulationState state)
     {
-        return new NAndGateSimulation(state);
+        return new AdderSimulation(state);
     }
 }
 
-public class NAndGateSimulationRenderer(IMapModel map)
-    : StatelessBuildingSimulationRenderer<NAndGateSimulation, INAndGateDrawData>(map);
+public class AdderSimulationRenderer(IMapModel map)
+    : StatelessBuildingSimulationRenderer<AdderSimulation, IAdderDrawData>(map);
 
-public interface INAndGateDrawData : IBuildingCustomDrawData;
+public interface IAdderDrawData : IBuildingCustomDrawData;
