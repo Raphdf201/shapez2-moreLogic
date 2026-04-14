@@ -34,9 +34,9 @@ public class NAndBuilding
             .AutoConnected();
 
         IBuildingConnectorData connectorData = BuildingConnectors.SingleTile()
-            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.South))
-            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.North))
-            .AddWireOutput(WireConnectorConfig.CustomOutput(TileDirection.East))
+            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.West))
+            .AddWireInput(WireConnectorConfig.CustomInput(TileDirection.East))
+            .AddWireOutput(WireConnectorConfig.CustomOutput(TileDirection.North))
             .Build();
 
         IBuildingBuilder blding = Building.Create(_defId)
