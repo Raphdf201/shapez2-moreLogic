@@ -18,16 +18,16 @@ namespace MoreLogic;
 
 public class NAndBuilding
 {
-    private readonly BuildingDefinitionId _defId = new("nand");
+    private readonly BuildingDefinitionId _defId = new("raphdf201-nand");
     private readonly ILogger _logger;
 
     public NAndBuilding(ILogger logger)
     {
         _logger = logger;
 
-        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("nandgroup"))
-            .WithTitle("building-variant.nand-gate.title".T())
-            .WithDescription("building-variant.nand-gate.description".T())
+        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("raphdf201-nand-group"))
+            .WithTitle("building-variant.raphdf201-nand.title".T())
+            .WithDescription("building-variant.raphdf201-nand.description".T())
             .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("nand.png"), out _))
             .AsNonTransportableBuilding()
             .WithPreferredPlacement(DefaultPreferredPlacementMode.Single)

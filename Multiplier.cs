@@ -16,19 +16,19 @@ using ILogger = Core.Logging.ILogger;
 
 namespace MoreLogic;
 
-public class AdderBuilding
+public class MultiplierBuilding
 {
-    private readonly BuildingDefinitionId _defId = new("raphdf201-adder");
+    private readonly BuildingDefinitionId _defId = new("raphdf201-multiplier");
     private readonly ILogger _logger;
 
-    public AdderBuilding(ILogger logger)
+    public MultiplierBuilding(ILogger logger)
     {
         _logger = logger;
 
-        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("raphdf201-adder-group"))
-            .WithTitle("building-variant.raphdf201-adder.title".T())
-            .WithDescription("building-variant.raphdf201-adder.description".T())
-            .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("adder.png"), out _))
+        IBuildingGroupBuilder bldingGroup = BuildingGroup.Create(new BuildingDefinitionGroupId("raphdf201-multiplier-group"))
+            .WithTitle("building-variant.raphdf201-multiplier.title".T())
+            .WithDescription("building-variant.raphdf201-multiplier.description".T())
+            .WithIcon(FileTextureLoader.LoadTextureAsSprite(Main.Res.SubPath("multiplier.png"), out _))
             .AsNonTransportableBuilding()
             .WithPreferredPlacement(DefaultPreferredPlacementMode.Single)
             .AutoConnected();
@@ -41,9 +41,9 @@ public class AdderBuilding
 
         IBuildingBuilder blding = Building.Create(_defId)
             .WithConnectorData(connectorData)
-            .DynamicallyRendering<AdderSimulationRenderer, AdderSimulation, IAdderDrawData>(
-                new AdderDrawData())
-            .WithStaticDrawData(AdderDrawData.CreateDrawData())
+            .DynamicallyRendering<MultiplierSimulationRenderer, MultiplierSimulation, IMultiplierDrawData>(
+                new MultiplierDrawData())
+            .WithStaticDrawData(MultiplierDrawData.CreateDrawData())
             .WithoutSound()
             .WithoutSimulationConfiguration()
             .WithEfficiencyData(new BuildingEfficiencyData(2, 1));
@@ -54,24 +54,24 @@ public class AdderBuilding
             .UnlockedAtMilestone(new ByIndexMilestoneSelector(2))
             .WithDefaultPlacement()
             .InToolbar(ToolbarElementLocator.Root().ChildAt(2).ChildAt(6).ChildAt(^1).InsertAfter())
-            .WithSimulation(new AdderFactoryBuilder(), _logger)
-            .WithCustomModules(new AdderModuleDataProvider())
+            .WithSimulation(new MultiplierFactoryBuilder(), _logger)
+            .WithCustomModules(new MultiplierModuleDataProvider())
             .WithoutPrediction()
             .Build();
     }
 
-    public AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState> Register()
+    public AtomicStatefulBuildingSimulationSystem<MultiplierSimulation, LogicGate2In1OutSimulationState> Register()
     {
-        return new AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState>(
-            new AdderSimulationFactory(), _defId, _logger);
+        return new AtomicStatefulBuildingSimulationSystem<MultiplierSimulation, LogicGate2In1OutSimulationState>(
+            new MultiplierSimulationFactory(), _defId, _logger);
     }
 }
 
-public class AdderDrawData : IAdderDrawData
+public class MultiplierDrawData : IMultiplierDrawData
 {
     public static BuildingDrawData CreateDrawData()
     {
-        var baseMeshPath = Main.Res.SubPath("adder.fbx");
+        var baseMeshPath = Main.Res.SubPath("multiplier.fbx");
         Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
         LOD6Mesh lodMesh = MeshLod.Create().AddLod0Mesh(baseMesh)
             .UseLod0AsLod1()
@@ -89,33 +89,33 @@ public class AdderDrawData : IAdderDrawData
             lodMesh.LODClose,
             new LODEmptyMesh(),
             BoundingBoxHelper.CreateBasicCollider(baseMesh),
-            new AdderDrawData(),
+            new MultiplierDrawData(),
             false,
             null,
             false);
     }
 }
 
-public class AdderFactoryBuilder
-    : IBuildingSimulationFactoryBuilder<AdderSimulation, LogicGate2In1OutSimulationState,
+public class MultiplierFactoryBuilder
+    : IBuildingSimulationFactoryBuilder<MultiplierSimulation, LogicGate2In1OutSimulationState,
         EmptyCustomSimulationConfiguration>
 {
-    public IFactory<LogicGate2In1OutSimulationState, AdderSimulation> BuildFactory(
+    public IFactory<LogicGate2In1OutSimulationState, MultiplierSimulation> BuildFactory(
         SimulationSystemsDependencies dependencies,
         [UnscopedRef] out EmptyCustomSimulationConfiguration config)
     {
         config = new EmptyCustomSimulationConfiguration();
-        return new AdderSimulationFactory();
+        return new MultiplierSimulationFactory();
     }
 }
 
-public class AdderModuleDataProvider :
-    SimulationBasedBuildingModuleDataProvider<AdderSimulation>
+public class MultiplierModuleDataProvider :
+    SimulationBasedBuildingModuleDataProvider<MultiplierSimulation>
 {
     protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
         BuildingModel building,
         ILocalizedSimulation localizedSimulation,
-        AdderSimulation actualSimulation)
+        MultiplierSimulation actualSimulation)
     {
         yield return new HUDSidePanelModuleWireInfo.Data(
             "Input 1", actualSimulation.Input0Conductor);
@@ -126,30 +126,30 @@ public class AdderModuleDataProvider :
     }
 }
 
-public class AdderSimulation(LogicGate2In1OutSimulationState state)
+public class MultiplierSimulation(LogicGate2In1OutSimulationState state)
     : LogicGate2In1OutSimulation(state)
 {
     protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
     {
         if (a is IntegerSignal sig1 && b is IntegerSignal sig2)
         {
-            return IntegerSignal.Get(sig1.Value + sig2.Value);
+            return IntegerSignal.Get(sig1.Value * sig2.Value);
         }
 
         return NullSignal.Instance;
     }
 }
 
-public class AdderSimulationFactory :
-    IFactory<LogicGate2In1OutSimulationState, AdderSimulation>
+public class MultiplierSimulationFactory :
+    IFactory<LogicGate2In1OutSimulationState, MultiplierSimulation>
 {
-    public AdderSimulation Produce(LogicGate2In1OutSimulationState state)
+    public MultiplierSimulation Produce(LogicGate2In1OutSimulationState state)
     {
-        return new AdderSimulation(state);
+        return new MultiplierSimulation(state);
     }
 }
 
-public class AdderSimulationRenderer(IMapModel map)
-    : StatelessBuildingSimulationRenderer<AdderSimulation, IAdderDrawData>(map);
+public class MultiplierSimulationRenderer(IMapModel map)
+    : StatelessBuildingSimulationRenderer<MultiplierSimulation, IMultiplierDrawData>(map);
 
-public interface IAdderDrawData : IBuildingCustomDrawData;
+public interface IMultiplierDrawData : IBuildingCustomDrawData;

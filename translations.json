@@ -1,14 +1,18 @@
 {
   "en-US": {
-    "building-variant.nand-gate.title": "NAND Gate",
-    "building-variant.nand-gate.description": "Deactivates if both inputs are on",
-    "building-variant.adder.title": "Adder",
-    "building-variant.adder.description": "Adds two integer signals"
+    "building-variant.raphdf201-nand.title": "NAND Gate",
+    "building-variant.raphdf201-nand.description": "Deactivates if both inputs are on",
+    "building-variant.raphdf201-adder.title": "Adder",
+    "building-variant.raphdf201-adder.description": "Adds two integer signals",
+    "building-variant.raphdf201-multiplier.title": "Multiplier",
+    "building-variant.raphdf201-multiplier.description": "Multiplies two integer signals"
   },
   "fr-CA": {
-    "building-variant.nand-gate.title": "Porte NAND",
-    "building-variant.nand-gate.description": "Se désactive si les deux signaux d'entrée sont vrais",
-    "building-variant.adder.title": "Adder",
-    "building-variant.adder.description": "Additionne deux signaux de nombre"
+    "building-variant.raphdf201-nand.title": "Porte NAND",
+    "building-variant.raphdf201-nand.description": "Se désactive si les deux signaux d'entrée sont vrais",
+    "building-variant.raphdf201-adder.title": "Additioneur",
+    "building-variant.raphdf201-adder.description": "Additionne deux signaux de nombre",
+    "building-variant.raphdf201-multiplier.title": "Multiplicateur",
+    "building-variant.raphdf201-multiplier.description": "Multiplie deux signaux de nombre"
   }
 }
