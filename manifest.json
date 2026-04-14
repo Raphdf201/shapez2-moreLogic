@@ -12,12 +12,12 @@
   ],
   "Dependencies": [
     {
-      "ModId": "steam:3542712030",
+      "ModId": "local:MonoMod.RuntimeDetour",
       "ModTitle": "MonoMod.RuntimeDetour",
       "Version": "^25.2.3"
     },
     {
-      "ModId": "steam:3542611357",
+      "ModId": "local:ShapezShifter",
       "ModTitle": "Shapez Shifter",
       "Version": "^1.0.0"
     }
