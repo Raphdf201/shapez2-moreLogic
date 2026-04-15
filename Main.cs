@@ -13,14 +13,20 @@ public class Main : IMod
     internal static readonly ModFolderLocator Res = ModDirectoryLocator.CreateLocator<Main>().SubLocator("Resources");
     private readonly Hook _modSystemHook;
     private readonly AdderBuilding _adder;
+    private readonly DividerBuilding _divider;
+    private readonly ModuloBuilding _modulo;
     private readonly MultiplierBuilding _multiplier;
     private readonly NAndBuilding _nand;
+    private readonly SubtractorBuilding _subtractor;
 
     public Main(ILogger logger)
     {
-        _adder = new AdderBuilding(logger);
-        _multiplier = new MultiplierBuilding(logger);
         _nand = new NAndBuilding(logger);
+        _adder = new AdderBuilding(logger);
+        _subtractor = new SubtractorBuilding(logger);
+        _divider = new DividerBuilding(logger);
+        _multiplier = new MultiplierBuilding(logger);
+        _modulo = new ModuloBuilding(logger);
 
         _modSystemHook = DetourHelper
             .CreatePostfixHook<BuiltinSimulationSystems, IEnumerable<ISimulationSystem>>(
@@ -39,7 +45,10 @@ public class Main : IMod
     {
         return systems
             .Append(_adder.Register())
+            .Append(_divider.Register())
+            .Append(_modulo.Register())
             .Append(_multiplier.Register())
+            .Append(_subtractor.Register())
             .Append(_nand.Register());
     }
 }
