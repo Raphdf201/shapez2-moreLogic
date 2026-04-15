@@ -7,3 +7,5 @@ riderModule.iml
 *.sln.DotSettings*
 .idea/
 *.blend1
+
+*.tmp.vdf

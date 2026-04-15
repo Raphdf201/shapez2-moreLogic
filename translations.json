@@ -4,15 +4,27 @@
     "building-variant.raphdf201-nand.description": "Deactivates if both inputs are on",
     "building-variant.raphdf201-adder.title": "Adder",
     "building-variant.raphdf201-adder.description": "Adds two integer signals",
+    "building-variant.raphdf201-subtractor.title": "Subtractor",
+    "building-variant.raphdf201-subtractor.description": "Substracts the left signal from the right signal",
     "building-variant.raphdf201-multiplier.title": "Multiplier",
-    "building-variant.raphdf201-multiplier.description": "Multiplies two integer signals"
+    "building-variant.raphdf201-multiplier.description": "Multiplies two integer signals",
+    "building-variant.raphdf201-divider.title": "Divider",
+    "building-variant.raphdf201-divider.description": "Divides the left signal by the right signal",
+    "building-variant.raphdf201-modulo.title": "Modulo",
+    "building-variant.raphdf201-modulo.description": "Outputs the remainder of the left signal divided by the right signal"
   },
   "fr-CA": {
     "building-variant.raphdf201-nand.title": "Porte NAND",
     "building-variant.raphdf201-nand.description": "Se désactive si les deux signaux d'entrée sont vrais",
     "building-variant.raphdf201-adder.title": "Additioneur",
-    "building-variant.raphdf201-adder.description": "Additionne deux signaux de nombre",
+    "building-variant.raphdf201-adder.description": "Additionne deux signaux numériques",
+    "building-variant.raphdf201-subtractor.title": "Soustracteur",
+    "building-variant.raphdf201-subtractor.description": "Soustrait le signal de droite du signal de gauche",
     "building-variant.raphdf201-multiplier.title": "Multiplicateur",
-    "building-variant.raphdf201-multiplier.description": "Multiplie deux signaux de nombre"
+    "building-variant.raphdf201-multiplier.description": "Multiplie deux signaux numériques",
+    "building-variant.raphdf201-divider.title": "Diviseur",
+    "building-variant.raphdf201-divider.description": "Divise le signal de gauche par le signal de droite",
+    "building-variant.raphdf201-modulo.title": "Modulo",
+    "building-variant.raphdf201-modulo.description": "Renvoie le reste de la division du signal de gauche par le signal de droite"
   }
 }
