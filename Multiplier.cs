@@ -16,12 +16,12 @@ using ILogger = Core.Logging.ILogger;
 
 namespace MoreLogic;
 
-public class MultiplierBuilding
+internal class MultiplierBuilding
 {
     private readonly BuildingDefinitionId _defId = new("raphdf201-multiplier");
     private readonly ILogger _logger;
 
-    public MultiplierBuilding(ILogger logger)
+    internal MultiplierBuilding(ILogger logger)
     {
         _logger = logger;
 
@@ -60,16 +60,16 @@ public class MultiplierBuilding
             .Build();
     }
 
-    public AtomicStatefulBuildingSimulationSystem<MultiplierSimulation, LogicGate2In1OutSimulationState> Register()
+    internal AtomicStatefulBuildingSimulationSystem<MultiplierSimulation, LogicGate2In1OutSimulationState> Register()
     {
         return new AtomicStatefulBuildingSimulationSystem<MultiplierSimulation, LogicGate2In1OutSimulationState>(
             new MultiplierSimulationFactory(), _defId, _logger);
     }
 }
 
-public class MultiplierDrawData : IMultiplierDrawData
+internal class MultiplierDrawData : IMultiplierDrawData
 {
-    public static BuildingDrawData CreateDrawData()
+    internal static BuildingDrawData CreateDrawData()
     {
         var baseMeshPath = Main.Res.SubPath("multiplier.fbx");
         Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
@@ -96,7 +96,7 @@ public class MultiplierDrawData : IMultiplierDrawData
     }
 }
 
-public class MultiplierFactoryBuilder
+internal class MultiplierFactoryBuilder
     : IBuildingSimulationFactoryBuilder<MultiplierSimulation, LogicGate2In1OutSimulationState,
         EmptyCustomSimulationConfiguration>
 {
@@ -109,7 +109,7 @@ public class MultiplierFactoryBuilder
     }
 }
 
-public class MultiplierModuleDataProvider :
+internal class MultiplierModuleDataProvider :
     SimulationBasedBuildingModuleDataProvider<MultiplierSimulation>
 {
     protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
@@ -126,7 +126,7 @@ public class MultiplierModuleDataProvider :
     }
 }
 
-public class MultiplierSimulation(LogicGate2In1OutSimulationState state)
+internal class MultiplierSimulation(LogicGate2In1OutSimulationState state)
     : LogicGate2In1OutSimulation(state)
 {
     protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
@@ -140,7 +140,7 @@ public class MultiplierSimulation(LogicGate2In1OutSimulationState state)
     }
 }
 
-public class MultiplierSimulationFactory :
+internal class MultiplierSimulationFactory :
     IFactory<LogicGate2In1OutSimulationState, MultiplierSimulation>
 {
     public MultiplierSimulation Produce(LogicGate2In1OutSimulationState state)
@@ -149,7 +149,7 @@ public class MultiplierSimulationFactory :
     }
 }
 
-public class MultiplierSimulationRenderer(IMapModel map)
+internal class MultiplierSimulationRenderer(IMapModel map)
     : StatelessBuildingSimulationRenderer<MultiplierSimulation, IMultiplierDrawData>(map);
 
-public interface IMultiplierDrawData : IBuildingCustomDrawData;
+internal interface IMultiplierDrawData : IBuildingCustomDrawData;

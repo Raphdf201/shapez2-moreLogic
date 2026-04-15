@@ -16,12 +16,12 @@ using ILogger = Core.Logging.ILogger;
 
 namespace MoreLogic;
 
-public class AdderBuilding
+internal class AdderBuilding
 {
     private readonly BuildingDefinitionId _defId = new("raphdf201-adder");
     private readonly ILogger _logger;
 
-    public AdderBuilding(ILogger logger)
+    internal AdderBuilding(ILogger logger)
     {
         _logger = logger;
 
@@ -60,16 +60,16 @@ public class AdderBuilding
             .Build();
     }
 
-    public AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState> Register()
+    internal AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState> Register()
     {
         return new AtomicStatefulBuildingSimulationSystem<AdderSimulation, LogicGate2In1OutSimulationState>(
             new AdderSimulationFactory(), _defId, _logger);
     }
 }
 
-public class AdderDrawData : IAdderDrawData
+internal class AdderDrawData : IAdderDrawData
 {
-    public static BuildingDrawData CreateDrawData()
+    internal static BuildingDrawData CreateDrawData()
     {
         var baseMeshPath = Main.Res.SubPath("adder.fbx");
         Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
@@ -96,7 +96,7 @@ public class AdderDrawData : IAdderDrawData
     }
 }
 
-public class AdderFactoryBuilder
+internal class AdderFactoryBuilder
     : IBuildingSimulationFactoryBuilder<AdderSimulation, LogicGate2In1OutSimulationState,
         EmptyCustomSimulationConfiguration>
 {
@@ -109,7 +109,7 @@ public class AdderFactoryBuilder
     }
 }
 
-public class AdderModuleDataProvider :
+internal class AdderModuleDataProvider :
     SimulationBasedBuildingModuleDataProvider<AdderSimulation>
 {
     protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
@@ -126,7 +126,7 @@ public class AdderModuleDataProvider :
     }
 }
 
-public class AdderSimulation(LogicGate2In1OutSimulationState state)
+internal class AdderSimulation(LogicGate2In1OutSimulationState state)
     : LogicGate2In1OutSimulation(state)
 {
     protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
@@ -140,7 +140,7 @@ public class AdderSimulation(LogicGate2In1OutSimulationState state)
     }
 }
 
-public class AdderSimulationFactory :
+internal class AdderSimulationFactory :
     IFactory<LogicGate2In1OutSimulationState, AdderSimulation>
 {
     public AdderSimulation Produce(LogicGate2In1OutSimulationState state)
@@ -149,7 +149,7 @@ public class AdderSimulationFactory :
     }
 }
 
-public class AdderSimulationRenderer(IMapModel map)
+internal class AdderSimulationRenderer(IMapModel map)
     : StatelessBuildingSimulationRenderer<AdderSimulation, IAdderDrawData>(map);
 
-public interface IAdderDrawData : IBuildingCustomDrawData;
+internal interface IAdderDrawData : IBuildingCustomDrawData;

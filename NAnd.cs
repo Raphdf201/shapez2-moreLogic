@@ -16,12 +16,12 @@ using ILogger = Core.Logging.ILogger;
 
 namespace MoreLogic;
 
-public class NAndBuilding
+internal class NAndBuilding
 {
     private readonly BuildingDefinitionId _defId = new("raphdf201-nand");
     private readonly ILogger _logger;
 
-    public NAndBuilding(ILogger logger)
+    internal NAndBuilding(ILogger logger)
     {
         _logger = logger;
 
@@ -60,16 +60,16 @@ public class NAndBuilding
             .Build();
     }
 
-    public AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState> Register()
+    internal AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState> Register()
     {
         return new AtomicStatefulBuildingSimulationSystem<NAndGateSimulation, LogicGate2In1OutSimulationState>(
             new NAndGateSimulationFactory(), _defId, _logger);
     }
 }
 
-public class NAndGateDrawData : INAndGateDrawData
+internal class NAndGateDrawData : INAndGateDrawData
 {
-    public static BuildingDrawData CreateDrawData()
+    internal static BuildingDrawData CreateDrawData()
     {
         var baseMeshPath = Main.Res.SubPath("nand.fbx");
         Mesh baseMesh = FileMeshLoader.LoadSingleMeshFromFile(baseMeshPath);
@@ -96,7 +96,7 @@ public class NAndGateDrawData : INAndGateDrawData
     }
 }
 
-public class NAndGateFactoryBuilder
+internal class NAndGateFactoryBuilder
     : IBuildingSimulationFactoryBuilder<NAndGateSimulation, LogicGate2In1OutSimulationState,
         EmptyCustomSimulationConfiguration>
 {
@@ -109,7 +109,7 @@ public class NAndGateFactoryBuilder
     }
 }
 
-public class NAndGateModuleDataProvider :
+internal class NAndGateModuleDataProvider :
     SimulationBasedBuildingModuleDataProvider<NAndGateSimulation>
 {
     protected override IEnumerable<IHUDSidePanelModuleData> GetSimulationModules(
@@ -126,7 +126,7 @@ public class NAndGateModuleDataProvider :
     }
 }
 
-public class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGate2In1OutSimulation(state)
+internal class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGate2In1OutSimulation(state)
 {
     protected override ISignal ComputeOutputSignal(ISignal a, ISignal b)
     {
@@ -134,7 +134,7 @@ public class NAndGateSimulation(LogicGate2In1OutSimulationState state) : LogicGa
     }
 }
 
-public class NAndGateSimulationFactory :
+internal class NAndGateSimulationFactory :
     IFactory<LogicGate2In1OutSimulationState, NAndGateSimulation>
 {
     public NAndGateSimulation Produce(LogicGate2In1OutSimulationState state)
@@ -143,7 +143,7 @@ public class NAndGateSimulationFactory :
     }
 }
 
-public class NAndGateSimulationRenderer(IMapModel map)
+internal class NAndGateSimulationRenderer(IMapModel map)
     : StatelessBuildingSimulationRenderer<NAndGateSimulation, INAndGateDrawData>(map);
 
-public interface INAndGateDrawData : IBuildingCustomDrawData;
+internal interface INAndGateDrawData : IBuildingCustomDrawData;
