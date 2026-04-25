@@ -6,5 +6,5 @@
     "previewfile" "${PREVIEW_IMG}"
     "visibility" "0"
     "title" "More logic"
-    "description" "Adds more logic items such as a nand gate and arithmetic buildings"
+    "description" "Adds a NAND gate and integer adder, subtractor, multiplier, divider and modulo"
 }
