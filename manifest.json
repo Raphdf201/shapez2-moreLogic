@@ -1,6 +1,6 @@
 {
+  "$schema": "https://shapez2.raphdf201.net/assets/manifestSchema.json",
   "Version": "1.0.0",
-  "Title": "MoreLogic",
   "Description": "Adds more logic items such as a nand gate and arithmetic buildings",
   "Author": "Raphdf201",
   "SavedModVersionCompabilityRangeWithSelf": "1.*.*",
